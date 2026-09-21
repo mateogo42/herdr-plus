@@ -9,6 +9,31 @@ herdr-plus is an add-on for [herdr](https://herdr.dev), built as a first-class
 - **[Quick Actions](#quick-actions)** — a fuzzy launcher for one-off
   actions/scripts, run in the directory you launched from.
 
+## About this fork
+
+This is a fork of [cloudmanic/herdr-plus](https://github.com/cloudmanic/herdr-plus).
+It tracks upstream and adds:
+
+- **`pick_subdirectory`** — set `pick_subdirectory = true` on a project with a fixed
+  `working_dir`, and opening it lists that directory's immediate subdirectories
+  (shown by bare name) so one project file serves a whole folder of repos. Picking
+  a subdirectory opens the workspace there, and the workspace takes the
+  subdirectory's name as its label:
+
+  ```toml
+  name = "Pick a repo"
+  working_dir = "~/dev"
+  pick_subdirectory = true
+
+  [[tabs]]
+  name = "claude"
+  command = "claude"
+  ```
+
+  Hidden directories are skipped, and it composes with `ctrl+g` (the worktree
+  branch prompt follows the pick). Like `working_dir = "{prompt}"`, these
+  projects can't be opened headless with `herdr-plus open <name>`.
+
 ## Install
 
 herdr-plus is a herdr plugin (requires **herdr ≥ 0.7.0**). Installing it registers
