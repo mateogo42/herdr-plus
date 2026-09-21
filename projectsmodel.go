@@ -54,6 +54,7 @@ const (
 	modeList projectsMode = iota
 	modeBranch
 	modePath
+	modeDirPick
 )
 
 // Projects-browser styles. These build on the shared palette in styles.go
@@ -116,6 +117,14 @@ type projectsModel struct {
 	pathInput       textinput.Model
 	pathErr         string
 	branchAfterPath bool
+
+	// Dir-pick state for projects with pick_subdirectory: the resolved options,
+	// the list showing them, any error from running the command, and whether the
+	// worktree branch prompt should follow once a directory is chosen.
+	dirOptions     []Option
+	dirList        fuzzyList
+	dirErr         string
+	branchAfterDir bool
 }
 
 // ungroupedHeading labels the catch-all bucket for projects that declare no
@@ -242,6 +251,9 @@ func (m projectsModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	if m.mode == modePath {
 		return m.updatePath(msg)
 	}
+	if m.mode == modeDirPick {
+		return m.updateDirPick(msg)
+	}
 
 	switch msg := msg.(type) {
 	case tea.WindowSizeMsg:
@@ -266,10 +278,10 @@ func (m projectsModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		case "ctrl+c", "esc":
 			m.quitting = true
 			return m, tea.Quit
-		case "up", "ctrl+p":
+		case "up", "ctrl+p", "ctrl+k":
 			m.list.moveUp()
 			return m, nil
-		case "down", "ctrl+n":
+		case "down", "ctrl+n", "ctrl+j":
 			m.list.moveDown()
 			return m, nil
 		case "enter":
@@ -364,6 +376,9 @@ func (m projectsModel) activateProject() (tea.Model, tea.Cmd) {
 	if p.promptsForDir() {
 		return m.promptProjectDir(false)
 	}
+	if p.PickSubdirectory {
+		return m.promptDirPick(false)
+	}
 	return m, tea.Quit
 }
 
@@ -379,6 +394,9 @@ func (m projectsModel) promptWorktreeBranch() (tea.Model, tea.Cmd) {
 	m.chosen = &p
 	if p.promptsForDir() {
 		return m.promptProjectDir(true)
+	}
+	if p.PickSubdirectory {
+		return m.promptDirPick(true)
 	}
 	return m.enterBranchMode()
 }
@@ -407,6 +425,114 @@ func (m projectsModel) promptProjectDir(branchAfter bool) (tea.Model, tea.Cmd) {
 	m.pathInput.SetValue("")
 	cmd := m.pathInput.Focus()
 	m.mode = modePath
+	return m, cmd
+}
+
+// promptDirPick lists the chosen project's working_dir subdirectories and
+// switches the browser into directory-pick mode over them. The listing happens
+// at open time — not at load — so the list always reflects live state. An
+// unreadable working_dir keeps the browser in this mode showing the error, so
+// the user sees what broke rather than a silent empty list. branchAfter carries
+// whether the worktree branch prompt should follow once a directory is chosen.
+func (m projectsModel) promptDirPick(branchAfter bool) (tea.Model, tea.Cmd) {
+	m.branchAfterDir = branchAfter
+	m.dirErr = ""
+	options, err := m.chosen.subdirectoryOptions()
+	if err != nil {
+		m.dirOptions = nil
+		m.dirErr = err.Error()
+		m.dirList = newFuzzyList("Pick a directory…", []listItem{})
+	} else {
+		m.dirOptions = options
+		m.dirList = newFuzzyList("Pick a directory…", optionItems(options))
+	}
+	m.dirList.setViewport(m.height-projectsChromeLines, m.width)
+	m.mode = modeDirPick
+	return m, textinput.Blink
+}
+
+// updateDirPick handles input while the directory pick is showing (the
+// modeDirPick state a pick_subdirectory project enters when activated). Enter
+// accepts the highlighted directory: it is expanded (~ and $VARS, exactly like
+// a typed path), checked to exist, and stamped into the chosen project as its
+// working directory, the project taking the directory's basename as its name
+// — so the workspace label says what it holds. It then quits to open the
+// workspace, or continues to the worktree branch prompt in the ctrl+g flow. An
+// invalid directory shows an inline error and keeps the pick up. Esc backs out
+// to the list, clearing the pending choice.
+func (m projectsModel) updateDirPick(msg tea.Msg) (tea.Model, tea.Cmd) {
+	switch msg := msg.(type) {
+	case tea.WindowSizeMsg:
+		m.width = msg.Width
+		m.height = msg.Height
+		m.dirList.setViewport(m.height-projectsChromeLines, m.width)
+		return m, nil
+
+	case tea.KeyMsg:
+		switch msg.String() {
+		case "ctrl+c":
+			m.quitting = true
+			return m, tea.Quit
+		case "esc":
+			m.mode = modeList
+			m.chosen = nil
+			m.dirOptions = nil
+			m.dirErr = ""
+			m.branchAfterDir = false
+			return m, nil
+		case "up", "ctrl+p", "ctrl+k":
+			m.dirList.moveUp()
+			return m, nil
+		case "down", "ctrl+n", "ctrl+j":
+			m.dirList.moveDown()
+			return m, nil
+		case "enter":
+			if m.chosen == nil {
+				m.mode = modeList
+				return m, nil
+			}
+			idx := m.dirList.selectedIndex()
+			if idx < 0 {
+				return m, nil // error state, or nothing matched
+			}
+			dir, err := expandPath(m.dirOptions[idx].resolvedValue())
+			if err != nil {
+				m.dirErr = err.Error()
+				return m, nil
+			}
+			if abs, err := filepath.Abs(dir); err == nil {
+				dir = abs
+			}
+			if fi, err := os.Stat(dir); err != nil || !fi.IsDir() {
+				m.dirErr = "not a directory: " + dir
+				return m, nil
+			}
+			m.chosen.WorkingDir = dir
+			m.chosen.Name = filepath.Base(dir)
+			if m.branchAfterDir {
+				return m.enterBranchMode()
+			}
+			return m, tea.Quit
+		}
+
+		cmd := m.dirList.editQuery(msg)
+		return m, cmd
+
+	case tea.MouseMsg:
+		switch msg.Button {
+		case tea.MouseButtonWheelUp:
+			m.dirList.moveUp()
+		case tea.MouseButtonWheelDown:
+			m.dirList.moveDown()
+		case tea.MouseButtonLeft:
+			if m.dirList.clickRow(msg.Y-projectsHeaderLines) && msg.Action == tea.MouseActionRelease {
+				return m.updateDirPick(tea.KeyMsg{Type: tea.KeyEnter})
+			}
+		}
+		return m, nil
+	}
+
+	cmd := m.dirList.editQuery(msg)
 	return m, cmd
 }
 
@@ -500,6 +626,9 @@ func (m projectsModel) View() string {
 	if m.mode == modePath {
 		return m.pathView(w, h)
 	}
+	if m.mode == modeDirPick {
+		return m.dirPickView(w, h)
+	}
 	return m.browserView(w, h)
 }
 
@@ -582,6 +711,36 @@ func (m projectsModel) pathView(w, h int) string {
 	return top + strings.Repeat("\n", gap) + footer
 }
 
+// dirPickView renders the directory pick for a pick_subdirectory project: the
+// chosen project's name above the fuzzy list of directories the command
+// produced, plus any error from running the command or accepting a directory.
+// It backs the modeDirPick state.
+func (m projectsModel) dirPickView(w, h int) string {
+	header := headerBarStyle.Width(w).Render(projectsTitle)
+
+	name := ""
+	if m.chosen != nil {
+		name = m.chosen.Name
+	}
+
+	body := nameStyle.Render(name) + "\n" + m.dirList.view("no directories found")
+	if m.dirErr != "" {
+		body += "\n" + errorStyle.Render(truncate(m.dirErr, w-4))
+	}
+	action := "open"
+	if m.branchAfterDir {
+		action = "continue"
+	}
+	footer := footerStyle.Render("  ↑/↓ move · type to filter · enter " + action + " · esc back")
+
+	top := header + "\n\n" + body
+	gap := h - lipgloss.Height(top) - lipgloss.Height(footer)
+	if gap < 1 {
+		gap = 1
+	}
+	return top + strings.Repeat("\n", gap) + footer
+}
+
 // detailBar renders the bordered preview of the currently highlighted project:
 // its working directory and the ordered list of tab names. It updates live as
 // the cursor moves.
@@ -607,6 +766,9 @@ func (m projectsModel) detailBar(w int) string {
 	dirText := p.displayWorkingDir()
 	if p.promptsForDir() {
 		dirText = "asks for a path"
+	}
+	if p.PickSubdirectory {
+		dirText = "pick inside " + dirText
 	}
 	dirLine := dirIconStyle.Render("📁 ") + pathStyle.Render(truncate(dirText, inner-3))
 

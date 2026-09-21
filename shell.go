@@ -70,14 +70,14 @@ func shellQuote(s string) string {
 }
 
 // posixQuote wraps s in single quotes, escaping any embedded single quote the
-// usual POSIX way ('\'' closes the quote, adds an escaped quote, and reopens
+// usual POSIX way ('\” closes the quote, adds an escaped quote, and reopens
 // it). Single quotes make the shell treat everything inside literally.
 func posixQuote(s string) string {
 	return "'" + strings.ReplaceAll(s, "'", `'\''`) + "'"
 }
 
 // powershellQuote wraps s in single quotes for PowerShell, escaping an embedded
-// single quote by doubling it ('' is a literal quote inside a single-quoted
+// single quote by doubling it (” is a literal quote inside a single-quoted
 // string). A PowerShell single-quoted string is fully literal — no $var or
 // backtick interpretation — which is exactly what we want for an injected value.
 func powershellQuote(s string) string {

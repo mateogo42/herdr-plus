@@ -192,14 +192,9 @@ func (a Action) render(ctx RunContext) (string, error) {
 
 // resolveOptions returns the option list a select action should show: the
 // static Options list, or — when OptionsCommand is set — the result of running
-// that command fresh through the shell right now and turning each non-blank
-// line of its stdout into an Option. A line is just "value" (used as both
-// label and value) unless it contains a tab, in which case it is
-// "value\tdescription" — the same label/value/description split a static
-// [[options]] entry has, so a dynamic list can flag things about each choice
-// (e.g. "already added") without that text ending up in the value the command
-// receives. This is what makes a select action's list reflect live state (e.g.
-// a directory listing) instead of a snapshot frozen into the TOML file.
+// that command fresh through the shell right now (see runOptionLines). This is
+// what makes a select action's list reflect live state (e.g. a directory
+// listing) instead of a snapshot frozen into the TOML file.
 func (a Action) resolveOptions(ctx RunContext) ([]Option, error) {
 	if strings.TrimSpace(a.OptionsCommand) == "" {
 		return a.Options, nil
@@ -210,14 +205,24 @@ func (a Action) resolveOptions(ctx RunContext) ([]Option, error) {
 		return nil, err
 	}
 
+	return runOptionLines(cmdline, ctx.WorkDir, ctx.envPairs())
+}
+
+// runOptionLines runs a shell command and turns its stdout into options, one
+// per non-blank line. A line is just "value" (used as both label and value)
+// unless it contains a tab, in which case it is "value\tdescription" — the
+// same label/value/description split a static [[options]] entry has, so a
+// dynamic list can flag things about each choice (e.g. "already added")
+// without that text ending up in the value the command receives.
+func runOptionLines(cmdline, workDir string, env []string) ([]Option, error) {
 	cmd := shellCommand(cmdline)
-	if ctx.WorkDir != "" {
-		cmd.Dir = ctx.WorkDir
+	if workDir != "" {
+		cmd.Dir = workDir
 	}
-	cmd.Env = append(os.Environ(), ctx.envPairs()...)
+	cmd.Env = append(os.Environ(), env...)
 	out, err := cmd.Output()
 	if err != nil {
-		return nil, fmt.Errorf("options_command for %q: %w", a.Name, err)
+		return nil, err
 	}
 
 	var options []Option

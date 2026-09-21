@@ -7,6 +7,7 @@
 package main
 
 import (
+	"os"
 	"path/filepath"
 	"strings"
 	"testing"
@@ -410,6 +411,127 @@ func TestProjectsModelPromptDirEscReturnsToList(t *testing.T) {
 	}
 	if m.chosen != nil {
 		t.Fatalf("chosen = %v, want nil", m.chosen)
+	}
+}
+
+// pickProjects returns a single pick_subdirectory project rooted at the given
+// directory.
+func pickProjects(root string) []Project {
+	return []Project{{
+		Name:             "pick",
+		WorkingDir:       root,
+		PickSubdirectory: true,
+		Tabs:             []ProjectTab{{Name: "claude", Command: "claude"}},
+	}}
+}
+
+// TestProjectsModelPickSubdirectoryCtrlGThenBranch confirms the ctrl+g flow on a
+// pick_subdirectory project picks the directory first, then asks for the branch.
+func TestProjectsModelPickSubdirectoryCtrlGThenBranch(t *testing.T) {
+	root := t.TempDir()
+	sub := filepath.Join(root, "app-one")
+	if err := os.MkdirAll(sub, 0o755); err != nil {
+		t.Fatal(err)
+	}
+
+	m := newProjectsModel(pickProjects(root), "/cfg/projects", "dvic/")
+	m = step(t, m, tea.KeyMsg{Type: tea.KeyCtrlG})
+
+	if m.mode != modeDirPick {
+		t.Fatalf("mode = %v, want modeDirPick first", m.mode)
+	}
+
+	m = step(t, m, tea.KeyMsg{Type: tea.KeyEnter}) // pick the only directory
+	if m.mode != modeBranch {
+		t.Fatalf("mode = %v, want modeBranch after picking", m.mode)
+	}
+
+	m = step(t, m, tea.KeyMsg{Type: tea.KeyRunes, Runes: []rune("feature")})
+	m = step(t, m, tea.KeyMsg{Type: tea.KeyEnter})
+
+	if !m.worktree || m.branch != "dvic/feature" {
+		t.Fatalf("worktree = %v branch = %q, want true dvic/feature", m.worktree, m.branch)
+	}
+	if m.chosen == nil || m.chosen.WorkingDir != sub {
+		t.Fatalf("chosen working dir = %v, want %q", m.chosen, sub)
+	}
+}
+
+// TestProjectsModelPickSubdirectoryMissingDirShowsError confirms an unreadable
+// working_dir keeps the pick up with the error visible instead of looking like
+// an empty directory list.
+func TestProjectsModelPickSubdirectoryMissingDirShowsError(t *testing.T) {
+	m := newProjectsModel(pickProjects("/no/such/dir-for-this-test"), "/cfg/projects", "")
+	m = step(t, m, tea.KeyMsg{Type: tea.KeyEnter})
+
+	if m.mode != modeDirPick {
+		t.Fatalf("mode = %v, want modeDirPick", m.mode)
+	}
+	if m.dirErr == "" {
+		t.Fatal("expected a directory-listing error")
+	}
+	if len(m.dirOptions) != 0 {
+		t.Fatalf("dirOptions = %+v, want none", m.dirOptions)
+	}
+}
+
+// TestProjectsModelPickSubdirectoryEscReturnsToList confirms escape backs out of
+// the directory pick without choosing anything.
+func TestProjectsModelPickSubdirectoryEscReturnsToList(t *testing.T) {
+	root := t.TempDir()
+	if err := os.MkdirAll(filepath.Join(root, "app-one"), 0o755); err != nil {
+		t.Fatal(err)
+	}
+
+	m := newProjectsModel(pickProjects(root), "/cfg/projects", "")
+	m = step(t, m, tea.KeyMsg{Type: tea.KeyEnter})
+	m = step(t, m, tea.KeyMsg{Type: tea.KeyEsc})
+
+	if m.mode != modeList {
+		t.Fatalf("mode = %v, want modeList", m.mode)
+	}
+	if m.chosen != nil {
+		t.Fatalf("chosen = %v, want nil", m.chosen)
+	}
+}
+
+// TestProjectsModelPickSubdirectoryListsByName confirms a pick_subdirectory
+// project lists working_dir's subdirectories by bare name (hidden ones
+// skipped), and choosing one stamps its full path into the project.
+func TestProjectsModelPickSubdirectoryListsByName(t *testing.T) {
+	root := t.TempDir()
+	for _, d := range []string{"api", "web", ".hidden"} {
+		if err := os.MkdirAll(filepath.Join(root, d), 0o755); err != nil {
+			t.Fatal(err)
+		}
+	}
+
+	projects := []Project{{
+		Name:             "repos",
+		WorkingDir:       root,
+		PickSubdirectory: true,
+		Tabs:             []ProjectTab{{Name: "claude"}},
+	}}
+	m := newProjectsModel(projects, "/cfg/projects", "")
+	m = step(t, m, tea.KeyMsg{Type: tea.KeyEnter})
+
+	if m.mode != modeDirPick {
+		t.Fatalf("mode = %v, want modeDirPick", m.mode)
+	}
+	if len(m.dirOptions) != 2 {
+		t.Fatalf("dirOptions = %+v, want 2 (hidden skipped)", m.dirOptions)
+	}
+	if m.dirOptions[0].Label != "api" {
+		t.Fatalf("option label = %q, want bare name %q", m.dirOptions[0].Label, "api")
+	}
+
+	m = step(t, m, tea.KeyMsg{Type: tea.KeyEnter}) // pick "api"
+	want := filepath.Join(root, "api")
+	if m.chosen == nil || m.chosen.WorkingDir != want {
+		t.Fatalf("chosen working dir = %v, want %q", m.chosen, want)
+	}
+	if m.chosen.Name != "api" {
+		t.Fatalf("chosen name = %q, want api", m.chosen.Name)
 	}
 }
 

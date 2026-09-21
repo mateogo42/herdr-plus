@@ -43,6 +43,9 @@ func runOpen(args []string) {
 	if err != nil {
 		errExit(err)
 	}
+	if p.promptsForDir() || p.PickSubdirectory {
+		errExit(fmt.Sprintf("project %q asks for its directory at open time (working_dir = {prompt} or pick_subdirectory) and has no headless mode; open it from the projects browser instead", p.Name))
+	}
 
 	// Connect to the running herdr instance over its socket.
 	client, err := newHerdrClient()

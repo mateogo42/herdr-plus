@@ -12,7 +12,7 @@ import (
 )
 
 // TestPosixQuote verifies POSIX single-quote escaping produces a single token,
-// escaping an embedded quote the '\'' way. Tested directly (not via shellQuote)
+// escaping an embedded quote the '\” way. Tested directly (not via shellQuote)
 // so it runs on every platform, not just Unix.
 func TestPosixQuote(t *testing.T) {
 	cases := []struct{ in, want string }{
@@ -29,7 +29,7 @@ func TestPosixQuote(t *testing.T) {
 }
 
 // TestPowershellQuote verifies PowerShell single-quote escaping produces a single
-// literal token, escaping an embedded quote by doubling it ('' -> '). Tested
+// literal token, escaping an embedded quote by doubling it (” -> '). Tested
 // directly so it runs on every platform, not just Windows.
 func TestPowershellQuote(t *testing.T) {
 	cases := []struct{ in, want string }{

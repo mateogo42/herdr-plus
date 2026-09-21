@@ -96,6 +96,31 @@ project still opens somewhere sensible.
 > one machine and not another.) If the directory doesn't exist, opening the
 > project fails with a clear error.
 
+### `pick_subdirectory`
+
+Optional. Set it with a fixed `working_dir` and opening the project lists that
+directory's **immediate subdirectories** — shown by bare name — so one project
+file serves a whole folder of repos:
+
+```toml
+name = "Pick a repo"
+working_dir = "~/dev"
+pick_subdirectory = true
+
+[[tabs]]
+name = "claude"
+command = "claude"
+```
+
+Picking a repo opens the workspace in it, and the workspace takes the repo's
+name as its label. Hidden directories are skipped. `pick_subdirectory` composes
+with `ctrl+g` (the branch prompt follows the pick) and needs a **fixed**
+`working_dir` (not `"{prompt}"`).
+
+> **Note:** Like `working_dir = "{prompt}"`, a `pick_subdirectory` project
+> can't be opened with `herdr-plus open <name>` — there's no picker to show the
+> list.
+
 ### `[[tabs]]`
 
 A project needs **at least one** `[[tabs]]` entry. Tabs are created in file
@@ -289,8 +314,9 @@ To get `herdr-plus` onto your `PATH`, see
 [Just the binary](https://github.com/cloudmanic/herdr-plus#just-the-binary) —
 installing the plugin alone does not put it there.
 
-> **Note:** A project whose `working_dir` is `{prompt}` can't be opened this way —
-> there's no picker to ask for the path. Use the browser for those.
+> **Note:** A project whose `working_dir` is `{prompt}` — or which sets
+> [`pick_subdirectory`](#pick_subdirectory) — can't be opened this way: there's
+> no picker to show. Use the browser for those.
 
 ## Adding and removing projects
 

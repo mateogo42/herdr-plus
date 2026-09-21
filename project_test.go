@@ -182,6 +182,9 @@ func TestProjectValidate(t *testing.T) {
 		{"ratio of one", Project{Name: "A", Tabs: []ProjectTab{{Name: "t", Panes: []ProjectPane{{}, {Ratio: 1}}}}}, true},
 		{"negative ratio", Project{Name: "A", Tabs: []ProjectTab{{Name: "t", Panes: []ProjectPane{{}, {Ratio: -0.2}}}}}, true},
 		{"first pane ratio ignored", Project{Name: "A", Tabs: []ProjectTab{{Name: "t", Panes: []ProjectPane{{Ratio: 30}}}}}, false},
+		{"ok pick_subdirectory", Project{Name: "A", WorkingDir: "/srv/x", PickSubdirectory: true, Tabs: []ProjectTab{{Name: "t"}}}, false},
+		{"pick_subdirectory without working_dir", Project{Name: "A", PickSubdirectory: true, Tabs: []ProjectTab{{Name: "t"}}}, true},
+		{"pick_subdirectory with prompt dir", Project{Name: "A", WorkingDir: "{prompt}", PickSubdirectory: true, Tabs: []ProjectTab{{Name: "t"}}}, true},
 	}
 	for _, c := range cases {
 		t.Run(c.name, func(t *testing.T) {

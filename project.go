@@ -117,6 +117,12 @@ type Project struct {
 	WorkingDir string       `toml:"working_dir"`
 	Tabs       []ProjectTab `toml:"tabs"`
 
+	// PickSubdirectory, when true, turns a fixed WorkingDir into a menu:
+	// opening the project lists WorkingDir's immediate subdirectories (by bare
+	// name) and the chosen one becomes the workspace root. It needs a fixed
+	// WorkingDir (not "{prompt}").
+	PickSubdirectory bool `toml:"pick_subdirectory"`
+
 	// source is the file the project was loaded from, used only for error
 	// messages. It is not part of the on-disk format.
 	source string
@@ -206,6 +212,9 @@ func (p Project) validate() error {
 	if len(p.Tabs) == 0 {
 		return fmt.Errorf("project %q (%s): needs at least one [[tabs]] entry", p.Name, p.source)
 	}
+	if p.PickSubdirectory && (strings.TrimSpace(p.WorkingDir) == "" || p.promptsForDir()) {
+		return fmt.Errorf("project %q (%s): pick_subdirectory needs a fixed working_dir to list", p.Name, p.source)
+	}
 	return validateTabs(p.Name, p.source, p.Tabs)
 }
 
@@ -257,6 +266,29 @@ const promptDirSentinel = "{prompt}"
 // open time (working_dir = "{prompt}").
 func (p Project) promptsForDir() bool {
 	return strings.TrimSpace(p.WorkingDir) == promptDirSentinel
+}
+
+// subdirectoryOptions lists working_dir's immediate subdirectories as the
+// directory pick: each option's label is the bare directory name, its value the
+// full path. Hidden directories are skipped, and a directory that cannot be
+// read surfaces as an error rather than an empty list.
+func (p Project) subdirectoryOptions() ([]Option, error) {
+	root, err := p.expandedWorkingDir()
+	if err != nil {
+		return nil, err
+	}
+	entries, err := os.ReadDir(root)
+	if err != nil {
+		return nil, fmt.Errorf("list subdirectories of %s: %w", root, err)
+	}
+	var options []Option
+	for _, e := range entries {
+		if !e.IsDir() || strings.HasPrefix(e.Name(), ".") {
+			continue
+		}
+		options = append(options, Option{Label: e.Name(), Value: filepath.Join(root, e.Name())})
+	}
+	return options, nil
 }
 
 // expandedWorkingDir resolves the project's working directory to an absolute
