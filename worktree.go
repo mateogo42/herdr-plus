@@ -241,7 +241,7 @@ func parseWorktreeEvent(eventJSON string, getenv func(string) string) (worktreeE
 // tabs into the workspace herdr already created. With no matching layout it does
 // nothing — every worktree fires this, so a quiet no-op is the common, correct
 // case. Output goes to stdout/stderr, which herdr captures in the plugin log
-// (`herdr plugin log list --plugin cloudmanic.herdr-plus`).
+// (`herdr plugin log list --plugin mateogo42.herdr-plus`).
 func runOnWorktreeEvent(_ []string) {
 	ev, err := parseWorktreeEvent(os.Getenv("HERDR_PLUGIN_EVENT_JSON"), os.Getenv)
 	if err != nil {

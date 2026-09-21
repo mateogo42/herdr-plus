@@ -13,7 +13,7 @@ import (
 
 // runPing is a tiny end-to-end smoke test of the plugin loop: it talks to herdr
 // over the socket and prints what it sees about the focused pane. herdr captures
-// stdout in the plugin log (`herdr plugin log list --plugin cloudmanic.herdr-plus`),
+// stdout in the plugin log (`herdr plugin log list --plugin mateogo42.herdr-plus`),
 // so a successful ping proves the plugin is registered, the socket is reachable,
 // and invocation works — before any real feature exists. It is the seed the
 // Projects feature grows from in the next phase.

@@ -68,8 +68,8 @@ changelog:
 # register it with `herdr plugin install` (or link the install). Users install
 # the binary via:
 #
-#   brew tap cloudmanic/herdr-plus https://github.com/cloudmanic/herdr-plus
-#   brew install cloudmanic/herdr-plus/herdr-plus
+#   brew tap mateogo42/herdr-plus https://github.com/mateogo42/herdr-plus
+#   brew install mateogo42/herdr-plus/herdr-plus
 #
 # Because the formula lives in the same repo as the source, the default
 # GITHUB_TOKEN the workflow already holds is enough to push it — no PAT, no
@@ -78,13 +78,13 @@ changelog:
 brews:
   - name: herdr-plus
     repository:
-      owner: cloudmanic
+      owner: mateogo42
       name: herdr-plus
       branch: main
       token: "{{ .Env.GITHUB_TOKEN }}"
     directory: Formula
     commit_msg_template: "Update {{ .ProjectName }} brew formula to {{ .Tag }} [skip ci]"
-    homepage: "https://github.com/cloudmanic/herdr-plus"
+    homepage: "https://github.com/mateogo42/herdr-plus"
     description: "herdr-plus — an extension for the herdr terminal multiplexer."
     license: "MIT"
     commit_author:

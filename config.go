@@ -87,7 +87,7 @@ func resolvePlacement(configured, fallback string) string {
 //
 // When herdr runs us as a plugin it sets HERDR_PLUGIN_CONFIG_DIR to the standard,
 // herdr-managed per-plugin config directory
-// (~/.config/herdr/plugins/config/cloudmanic.herdr-plus). That is the canonical
+// (~/.config/herdr/plugins/config/mateogo42.herdr-plus). That is the canonical
 // home for our config — herdr provisions it, isolates it per plugin, and keeps it
 // across uninstall/upgrade — so we prefer it whenever it is set.
 //

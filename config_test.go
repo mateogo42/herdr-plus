@@ -16,7 +16,7 @@ import (
 // directory (HERDR_PLUGIN_CONFIG_DIR) wins over the legacy location when set —
 // the case that runs whenever herdr executes a plugin command.
 func TestConfigBaseDirPrefersManagedDir(t *testing.T) {
-	managed := filepath.Join(t.TempDir(), "herdr", "plugins", "config", "cloudmanic.herdr-plus")
+	managed := filepath.Join(t.TempDir(), "herdr", "plugins", "config", "mateogo42.herdr-plus")
 	t.Setenv("HERDR_PLUGIN_CONFIG_DIR", managed)
 	t.Setenv("XDG_CONFIG_HOME", "/tmp/should-be-ignored")
 

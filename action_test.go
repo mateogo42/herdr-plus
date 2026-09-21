@@ -30,9 +30,9 @@ func TestActionRender(t *testing.T) {
 		},
 		{
 			name:   "value substituted into template",
-			action: Action{Name: "Repo", Type: TypeSelect, Command: "open https://github.com/cloudmanic/{{.Value}}"},
+			action: Action{Name: "Repo", Type: TypeSelect, Command: "open https://github.com/mateogo42/{{.Value}}"},
 			ctx:    RunContext{Value: "herdr-plus"},
-			want:   "open https://github.com/cloudmanic/herdr-plus",
+			want:   "open https://github.com/mateogo42/herdr-plus",
 		},
 		{
 			// The value is appended and quoted for the current platform's shell;

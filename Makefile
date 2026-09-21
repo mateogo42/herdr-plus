@@ -49,7 +49,7 @@ tidy:
 
 # plugin-link builds the binary and links this checkout with herdr as a local
 # development plugin, so its entry points run the freshly built ./bin/herdr-plus.
-# Undo with `herdr plugin unlink cloudmanic.herdr-plus`.
+# Undo with `herdr plugin unlink mateogo42.herdr-plus`.
 plugin-link: build
 	herdr plugin link $(CURDIR)
 

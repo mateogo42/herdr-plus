@@ -12,8 +12,8 @@ no central config file — everything is a file per entry.
 Ask herdr where it is:
 
 ```bash
-herdr plugin config-dir cloudmanic.herdr-plus
-# → ~/.config/herdr/plugins/config/cloudmanic.herdr-plus
+herdr plugin config-dir mateogo42.herdr-plus
+# → ~/.config/herdr/plugins/config/mateogo42.herdr-plus
 ```
 
 herdr provisions this directory for the plugin and **keeps it across uninstall and

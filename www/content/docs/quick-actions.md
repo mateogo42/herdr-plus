@@ -9,7 +9,7 @@ pick an action, and it runs — in the directory you launched from.
 
 ## What it does
 
-Trigger the `cloudmanic.herdr-plus.quick-actions` action — from herdr's action
+Trigger the `mateogo42.herdr-plus.quick-actions` action — from herdr's action
 menu, or a [bound key](../keybindings/) — and herdr-plus opens a focused launcher
 over your workspace. The launcher is a fuzzy finder over your actions:
 

@@ -11,7 +11,7 @@
 #
 # Usage:
 #
-#   curl -fsSL https://raw.githubusercontent.com/cloudmanic/herdr-plus/main/install.sh | sh
+#   curl -fsSL https://raw.githubusercontent.com/mateogo42/herdr-plus/main/install.sh | sh
 #
 # Override the install location:
 #
@@ -28,7 +28,7 @@
 
 set -eu
 
-REPO="cloudmanic/herdr-plus"
+REPO="mateogo42/herdr-plus"
 BINARY="herdr-plus"
 
 # Pretty output when stderr is a terminal, plain otherwise.

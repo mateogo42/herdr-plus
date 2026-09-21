@@ -10,14 +10,14 @@ order.
 ## The plugin didn't install or its actions don't show up
 
 1. **Is it registered?** Run `herdr plugin list` and look for
-   `cloudmanic.herdr-plus`. If it's missing, re-run
-   `herdr plugin install cloudmanic/herdr-plus`.
+   `mateogo42.herdr-plus`. If it's missing, re-run
+   `herdr plugin install mateogo42/herdr-plus`.
 2. **Did the build step fail?** The install builds the binary (Go, or a prebuilt
    download as a fallback). Check the plugin's log for build output:
-   `herdr plugin log list --plugin cloudmanic.herdr-plus`.
+   `herdr plugin log list --plugin mateogo42.herdr-plus`.
 3. **Is herdr new enough?** herdr-plus requires **herdr ≥ 0.7.0**. Check with
    `herdr --version`.
-4. **Are the actions there?** `herdr plugin action list --plugin cloudmanic.herdr-plus`
+4. **Are the actions there?** `herdr plugin action list --plugin mateogo42.herdr-plus`
    should list `projects` and `quick-actions`.
 
 ## Nothing happens when I press the key
@@ -45,7 +45,7 @@ and reload with `herdr server reload-config`.
 ## My config / action / project isn't picked up
 
 1. **Right directory?** Both live under herdr-plus's config dir — find it with
-   `herdr plugin config-dir cloudmanic.herdr-plus`. Quick actions go in its
+   `herdr plugin config-dir mateogo42.herdr-plus`. Quick actions go in its
    `quick-actions/` subdir; projects go in `projects/`. Per-project quick actions
    go in a repo's `.herdr-plus/quick-actions/`. See [Configuration](../configuration/).
 2. **Is the file `*.toml`?** Only files ending in `.toml` are loaded.
@@ -82,7 +82,7 @@ tabs. The [worktree auto-layout](../worktrees/) handler runs on herdr's
 — check the plugin log first:
 
 ```bash
-herdr plugin log list --plugin cloudmanic.herdr-plus
+herdr plugin log list --plugin mateogo42.herdr-plus
 ```
 
 Common causes:
@@ -140,10 +140,10 @@ herdr-plus version
 ```
 
 (`--version`, `-v`, and `-V` work too — this needs the optional standalone binary.)
-To upgrade the plugin, re-run `herdr plugin install cloudmanic/herdr-plus`; see
+To upgrade the plugin, re-run `herdr plugin install mateogo42/herdr-plus`; see
 [Installation](../installation/).
 
 ## Still stuck?
 
 herdr-plus is open source. File an issue or read the source on
-[GitHub](https://github.com/cloudmanic/herdr-plus).
+[GitHub](https://github.com/mateogo42/herdr-plus).

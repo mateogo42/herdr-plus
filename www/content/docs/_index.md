@@ -5,7 +5,7 @@ description: "herdr-plus is a free, open-source herdr plugin that adds Quick Act
 
 herdr-plus is an add-on for [herdr](https://herdr.dev), built as a first-class
 [herdr plugin](https://herdr.dev/docs/plugins/). It is free and open source, built
-by [Cloudmanic Labs](https://github.com/cloudmanic/herdr-plus).
+by [Cloudmanic Labs](https://github.com/mateogo42/herdr-plus).
 
 ## The mental model
 
@@ -18,8 +18,8 @@ Two actions ship today:
 
 | Action id | What it does |
 |-----------|--------------|
-| `cloudmanic.herdr-plus.projects` | Opens a full-screen fuzzy browser of your **Projects** — declarative templates that spin up a whole herdr workspace. |
-| `cloudmanic.herdr-plus.quick-actions` | Opens the **Quick Actions** launcher — a fuzzy finder that runs a one-off action in the directory you launched from. |
+| `mateogo42.herdr-plus.projects` | Opens a full-screen fuzzy browser of your **Projects** — declarative templates that spin up a whole herdr workspace. |
+| `mateogo42.herdr-plus.quick-actions` | Opens the **Quick Actions** launcher — a fuzzy finder that runs a one-off action in the directory you launched from. |
 
 Everything herdr-plus does is driven by plain TOML files you own, kept in herdr's
 managed plugin config directory. We expect the list of features to grow.

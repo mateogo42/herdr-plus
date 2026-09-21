@@ -39,25 +39,25 @@ disableKinds = ["taxonomy", "term", "RSS"]
   heroVideoUrl = "https://www.youtube.com/embed/G-_4QAA53s4"
 
   # External references — single source of truth, surfaced across templates.
-  githubUrl       = "https://github.com/cloudmanic/herdr-plus"
+  githubUrl       = "https://github.com/mateogo42/herdr-plus"
   herdrUrl        = "https://herdr.dev"
   herdrInstallUrl = "https://herdr.dev/docs/install/"
   herdrPluginsUrl = "https://herdr.dev/docs/plugins/"
   cloudmanicUrl   = "https://cloudmanic.com"
-  releasesUrl     = "https://github.com/cloudmanic/herdr-plus/releases"
-  licenseUrl      = "https://github.com/cloudmanic/herdr-plus/blob/main/LICENSE"
+  releasesUrl     = "https://github.com/mateogo42/herdr-plus/releases"
+  licenseUrl      = "https://github.com/mateogo42/herdr-plus/blob/main/LICENSE"
 
   # Install commands — edited here, rendered everywhere (hero, docs, install box).
   # The plugin install IS the install: herdr clones the repo, runs the build, and
   # registers the actions. Re-running the same command upgrades in place.
-  pluginInstallCmd = "herdr plugin install cloudmanic/herdr-plus"
-  configDirCmd     = "herdr plugin config-dir cloudmanic.herdr-plus"
+  pluginInstallCmd = "herdr plugin install mateogo42/herdr-plus"
+  configDirCmd     = "herdr plugin config-dir mateogo42.herdr-plus"
 
   # Standalone-binary install (optional — only to get `herdr-plus` on your PATH;
   # it does NOT register the plugin with herdr).
-  brewTapCmd      = "brew tap cloudmanic/herdr-plus https://github.com/cloudmanic/herdr-plus"
-  brewInstallCmd  = "brew install cloudmanic/herdr-plus/herdr-plus"
-  scriptInstallCmd = "curl -fsSL https://raw.githubusercontent.com/cloudmanic/herdr-plus/main/install.sh | sh"
+  brewTapCmd      = "brew tap mateogo42/herdr-plus https://github.com/mateogo42/herdr-plus"
+  brewInstallCmd  = "brew install mateogo42/herdr-plus/herdr-plus"
+  scriptInstallCmd = "curl -fsSL https://raw.githubusercontent.com/mateogo42/herdr-plus/main/install.sh | sh"
 
   # Footer attribution.
   company  = "Cloudmanic Labs, LLC"

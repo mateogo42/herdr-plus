@@ -17,7 +17,7 @@ import (
 func TestRunContextRoundTrip(t *testing.T) {
 	want := RunContext{
 		Value:          "some value",
-		WorkDir:        "/Users/spicer/Development/cloudmanic/herdr-plus",
+		WorkDir:        "/Users/spicer/Development/mateogo42/herdr-plus",
 		PaneId:         "p_172",
 		TabId:          "w1:1",
 		TabLabel:       "claude",

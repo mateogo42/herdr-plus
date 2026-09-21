@@ -7,7 +7,7 @@ weight: 100
 A gallery of complete, copy-pasteable examples. Drop a quick action into the
 `quick-actions/` subdirectory of [herdr-plus's config dir](../configuration/), or a
 project into `projects/` — one file per entry, file name up to you. Find the
-directory with `herdr plugin config-dir cloudmanic.herdr-plus`.
+directory with `herdr plugin config-dir mateogo42.herdr-plus`.
 
 ## Quick actions
 
@@ -56,7 +56,7 @@ A second fuzzy list. Headings group the options; a blank separator adds a spacer
 name = "Open Repo on GitHub"
 description = "Pick one of our repos and open it"
 type = "select"
-command = "open https://github.com/cloudmanic/{{.Value}}"
+command = "open https://github.com/mateogo42/{{.Value}}"
 
 [[options]]
 heading = "Apps"
@@ -79,7 +79,7 @@ heading = "Tools"
 [[options]]
 label = "Herdr Plus"
 value = "herdr-plus"
-description = "cloudmanic/herdr-plus"
+description = "mateogo42/herdr-plus"
 ```
 
 ### A `form` with `urlquery`

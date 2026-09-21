@@ -8,8 +8,8 @@ herdr-plus registers two herdr **actions**:
 
 | Action id | Opens |
 |-----------|-------|
-| `cloudmanic.herdr-plus.projects` | The Projects browser |
-| `cloudmanic.herdr-plus.quick-actions` | The Quick Actions launcher |
+| `mateogo42.herdr-plus.projects` | The Projects browser |
+| `mateogo42.herdr-plus.quick-actions` | The Quick Actions launcher |
 
 You can run either one **from herdr's action menu** without binding anything. If
 you'd rather trigger them with a keystroke, bind each to a key.
@@ -24,13 +24,13 @@ touches it. Add a `[[keys.command]]` entry with `type = "plugin_action"` whose
 [[keys.command]]
 key = "prefix+up"
 type = "plugin_action"
-command = "cloudmanic.herdr-plus.projects"
+command = "mateogo42.herdr-plus.projects"
 description = "herdr-plus: projects"
 
 [[keys.command]]
 key = "prefix+down"
 type = "plugin_action"
-command = "cloudmanic.herdr-plus.quick-actions"
+command = "mateogo42.herdr-plus.quick-actions"
 description = "herdr-plus: quick actions"
 ```
 

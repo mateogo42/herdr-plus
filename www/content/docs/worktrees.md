@@ -112,7 +112,7 @@ events, declared in `herdr-plugin.toml`. herdr runs it for you (you never invoke
 it by hand), and its output is captured in the plugin log:
 
 ```bash
-herdr plugin log list --plugin cloudmanic.herdr-plus
+herdr plugin log list --plugin mateogo42.herdr-plus
 ```
 
 A line like `applied worktree layout "options-cafe.toml" to repo "options-cafe"`

@@ -9,7 +9,7 @@ laid-out workspace with a single keypress.
 
 ## What it does
 
-Trigger the `cloudmanic.herdr-plus.projects` action — from herdr's action menu, or
+Trigger the `mateogo42.herdr-plus.projects` action — from herdr's action menu, or
 a [bound key](../keybindings/) — and herdr-plus opens a **full-screen fuzzy
 browser** of your projects.
 
@@ -35,7 +35,7 @@ Projects live in the `projects/` subdirectory of
 The file name doesn't matter — only its contents. Find the directory with:
 
 ```bash
-herdr plugin config-dir cloudmanic.herdr-plus
+herdr plugin config-dir mateogo42.herdr-plus
 ```
 
 The directory **starts empty**: unlike quick-actions, it is never seeded with
@@ -311,7 +311,7 @@ alias work='herdr-plus open my-work-app'
 ```
 
 To get `herdr-plus` onto your `PATH`, see
-[Just the binary](https://github.com/cloudmanic/herdr-plus#just-the-binary) —
+[Just the binary](https://github.com/mateogo42/herdr-plus#just-the-binary) —
 installing the plugin alone does not put it there.
 
 > **Note:** A project whose `working_dir` is `{prompt}` — or which sets

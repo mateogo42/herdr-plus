@@ -10,7 +10,7 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/cloudmanic/herdr-plus/internal/version"
+	"github.com/mateogo42/herdr-plus/internal/version"
 )
 
 // main is the plugin binary's entry point. herdr-plus is a herdr plugin: herdr
@@ -60,5 +60,5 @@ func main() {
 			return
 		}
 	}
-	errExit("a herdr plugin; run its actions through herdr (e.g. `herdr plugin action invoke cloudmanic.herdr-plus.projects`) or `herdr-plus version`.")
+	errExit("a herdr plugin; run its actions through herdr (e.g. `herdr plugin action invoke mateogo42.herdr-plus.projects`) or `herdr-plus version`.")
 }

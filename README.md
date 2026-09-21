@@ -15,15 +15,15 @@ herdr-plus is a herdr plugin (requires **herdr ≥ 0.7.0**). Installing it regis
 the plugin's actions with herdr — no editing of your `config.toml`.
 
 ```bash
-herdr plugin install cloudmanic/herdr-plus
+herdr plugin install mateogo42/herdr-plus
 ```
 
 herdr clones the repo, runs the manifest's `[[build]]` step, and registers the
 actions. That step **prefers a local Go toolchain** (an exact build of the source)
 and **falls back to downloading the latest prebuilt release binary**, so it works
 **with or without Go**. Manage it with `herdr plugin list`,
-`herdr plugin action list --plugin cloudmanic.herdr-plus`, and
-`herdr plugin uninstall cloudmanic.herdr-plus`.
+`herdr plugin action list --plugin mateogo42.herdr-plus`, and
+`herdr plugin uninstall mateogo42.herdr-plus`.
 
 > **Windows** (herdr's Windows support is in preview): the plugin installs and
 > runs on Windows, but its build step compiles straight from source with the Go
@@ -46,11 +46,11 @@ prebuilt binaries are published on every release:
 
 ```bash
 # Homebrew (the repo is its own tap)
-brew tap cloudmanic/herdr-plus https://github.com/cloudmanic/herdr-plus
-brew install cloudmanic/herdr-plus/herdr-plus
+brew tap mateogo42/herdr-plus https://github.com/mateogo42/herdr-plus
+brew install mateogo42/herdr-plus/herdr-plus
 
 # or the install script (Linux/macOS, no Homebrew)
-curl -fsSL https://raw.githubusercontent.com/cloudmanic/herdr-plus/main/install.sh | sh
+curl -fsSL https://raw.githubusercontent.com/mateogo42/herdr-plus/main/install.sh | sh
 ```
 
 The binary on its own doesn't register the plugin with herdr — use
@@ -62,8 +62,8 @@ with cross-compiled binaries.
 herdr-plus keeps its config in herdr's managed plugin directory — find it with:
 
 ```bash
-herdr plugin config-dir cloudmanic.herdr-plus
-# → ~/.config/herdr/plugins/config/cloudmanic.herdr-plus
+herdr plugin config-dir mateogo42.herdr-plus
+# → ~/.config/herdr/plugins/config/mateogo42.herdr-plus
 ```
 
 Inside it, `projects/` holds your [project templates](#projects) and
@@ -95,7 +95,7 @@ default and prints a warning to stderr rather than being passed through to herdr
 
 Pick a project from a full-screen fuzzy browser and herdr-plus builds its whole
 workspace. Trigger it from herdr's plugin action menu, or
-[bind a key](#binding-a-key) — the action is `cloudmanic.herdr-plus.projects`.
+[bind a key](#binding-a-key) — the action is `mateogo42.herdr-plus.projects`.
 Inside the browser, **Enter** opens the highlighted project as a normal workspace;
 **ctrl+g** opens it as a git worktree. The worktree prompt accepts an optional
 branch name: empty lets herdr generate `worktree/...`, bare names get the optional
@@ -237,7 +237,7 @@ A tab uses *either* `command` *or* `[[tabs.panes]]`, not both.
 ## Quick Actions
 
 A fuzzy launcher for one-off commands. Trigger it (action
-`cloudmanic.herdr-plus.quick-actions`), fuzzy-pick an action, and it runs in the
+`mateogo42.herdr-plus.quick-actions`), fuzzy-pick an action, and it runs in the
 directory you launched from. Actions are TOML files in the `quick-actions/` subdir
 of [herdr-plus's config dir](#configuration) (seeded with editable examples on
 first run). A repo can also ship its own in `<repo>/.herdr-plus/quick-actions/`, shown
@@ -256,7 +256,7 @@ command = "open https://github.com"
 # select — pick from a second fuzzy list; the choice becomes {{.Value}}
 name = "Open Repo"
 type = "select"
-command = "open https://github.com/cloudmanic/{{.Value}}"
+command = "open https://github.com/mateogo42/{{.Value}}"
 
 [[options]]
 label = "Herdr Plus"
@@ -344,7 +344,7 @@ in `worktrees/` at all, the feature is inert — every worktree fires the event,
 herdr-plus does nothing when nothing matches.
 
 The handler's output shows up in `herdr plugin log list --plugin
-cloudmanic.herdr-plus`, so you can confirm whether a layout fired.
+mateogo42.herdr-plus`, so you can confirm whether a layout fired.
 
 ### Wildcard (generic) layouts
 
@@ -389,13 +389,13 @@ Binding keys to the actions is an optional, one-time edit to **your** herdr
 [[keys.command]]
 key = "prefix+up"
 type = "plugin_action"
-command = "cloudmanic.herdr-plus.projects"
+command = "mateogo42.herdr-plus.projects"
 description = "herdr-plus: projects"
 
 [[keys.command]]
 key = "prefix+down"
 type = "plugin_action"
-command = "cloudmanic.herdr-plus.quick-actions"
+command = "mateogo42.herdr-plus.quick-actions"
 description = "herdr-plus: quick actions"
 ```
 

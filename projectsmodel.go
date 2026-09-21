@@ -23,7 +23,7 @@ const projectsTitle = "Herdr Plus · Projects"
 
 // docsURL is where the empty-state points for "more documentation". Full docs
 // live elsewhere later; for now the repo is the home of everything.
-const docsURL = "https://github.com/cloudmanic/herdr-plus"
+const docsURL = "https://github.com/mateogo42/herdr-plus"
 
 // projectsHeaderLines is how many screen lines precede the embedded fuzzyList in
 // the projects browser: the full-width title bar and the blank line under it. A

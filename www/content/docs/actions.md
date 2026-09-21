@@ -54,12 +54,12 @@ Shows a second fuzzy list of options. The chosen option's `value` becomes
 name = "Open Repo on GitHub"
 description = "Pick a repo and open it"
 type = "select"
-command = "open https://github.com/cloudmanic/{{.Value}}"
+command = "open https://github.com/mateogo42/{{.Value}}"
 
 [[options]]
 label = "Herdr Plus"
 value = "herdr-plus"
-description = "cloudmanic/herdr-plus"
+description = "mateogo42/herdr-plus"
 
 [[options]]
 label = "Options Cafe"

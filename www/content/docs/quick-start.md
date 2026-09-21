@@ -17,7 +17,7 @@ herdr server.
 ## 2. Install the plugin
 
 ```bash
-herdr plugin install cloudmanic/herdr-plus
+herdr plugin install mateogo42/herdr-plus
 ```
 
 herdr clones the repo, builds it (with or without Go), and registers the plugin's
@@ -29,10 +29,10 @@ development, the optional standalone binary, and how upgrades work.
 herdr-plus registers two actions. You can run either one straight from **herdr's
 action menu** — no configuration required:
 
-- `cloudmanic.herdr-plus.projects` opens the **Projects** browser — a full-screen
+- `mateogo42.herdr-plus.projects` opens the **Projects** browser — a full-screen
   fuzzy picker. With no project files yet, it shows an onboarding card explaining
   how to add your first one.
-- `cloudmanic.herdr-plus.quick-actions` opens the **Quick Actions** launcher — a
+- `mateogo42.herdr-plus.quick-actions` opens the **Quick Actions** launcher — a
   fuzzy finder over your actions. The first time you open it, herdr-plus seeds your
   config with editable example actions so you have something to try right away.
 
@@ -46,13 +46,13 @@ key. Add two `[[keys.command]]` entries with `type = "plugin_action"` to your he
 [[keys.command]]
 key = "prefix+up"
 type = "plugin_action"
-command = "cloudmanic.herdr-plus.projects"
+command = "mateogo42.herdr-plus.projects"
 description = "herdr-plus: projects"
 
 [[keys.command]]
 key = "prefix+down"
 type = "plugin_action"
-command = "cloudmanic.herdr-plus.quick-actions"
+command = "mateogo42.herdr-plus.quick-actions"
 description = "herdr-plus: quick actions"
 ```
 

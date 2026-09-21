@@ -8,12 +8,12 @@
 name = "Open Repo on GitHub"
 description = "Pick one of our repos and open it"
 type = "select"
-command = "{{opener}} https://github.com/cloudmanic/{{.Value}}"
+command = "{{opener}} https://github.com/mateogo42/{{.Value}}"
 
 [[options]]
 label = "Herdr Plus"
 value = "herdr-plus"
-description = "cloudmanic/herdr-plus"
+description = "mateogo42/herdr-plus"
 
 [[options]]
 label = "Options Cafe"
